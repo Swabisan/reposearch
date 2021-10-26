@@ -5,13 +5,15 @@ interface Props {
 }
 
 const SearchResults = ({ results }: Props) => {
-  console.log(results);
   return (
     <div>
-      <h2>Search Results</h2>
       <ul>
         {results.map((result) => {
-          return <li key={result.id}>{result.name as string}</li>;
+          return (
+            <li key={result.id}>
+              <a href={result.html_url}>{result.name as string}</a>
+            </li>
+          );
         })}
       </ul>
     </div>

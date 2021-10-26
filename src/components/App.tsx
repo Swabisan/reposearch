@@ -1,24 +1,41 @@
 import React, { useState } from "react";
 
-import { findRepositories } from "../api/search";
-
-import SearchBar from "./SearchBar";
+import { searchRepositories } from "../api/github";
 import SearchResults from "./SearchResults";
 
+import styles from "./App.module.css";
+import MultiSelectTextInput from "./MultiSelectTextInput";
+
 const App = () => {
+  const [loading, setLoading] = useState(false);
   const [repositories, setRepositories] = useState([] as any[]);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <SearchBar
-          onSearch={async (input) => {
-            setRepositories(await findRepositories(input));
+    <div className="app">
+      <header className="app-header">
+        <MultiSelectTextInput
+          className={styles.searchBar}
+          onSubmit={async (userInput) => {
+            setLoading(true);
+            setRepositories(
+              await searchRepositories(...userInput).then((value) => {
+                setLoading(false);
+                return value;
+              })
+            );
           }}
-          placeholder="Search repositories..."
+          placeholder="Search for a GitHub repo..."
+          title="Keywords:"
         />
-        <SearchResults results={repositories} />
       </header>
+      <section>
+        <div>{loading ? "loading..." : null}</div>
+        {repositories?.length > 0 ? (
+          <SearchResults results={repositories} />
+        ) : (
+          "no results"
+        )}
+      </section>
     </div>
   );
 };
