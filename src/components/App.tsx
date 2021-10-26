@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
-import { findRepositories } from "../../api/search";
+import { findRepositories } from "../api/search";
 
-import SearchBar from "../SearchBar";
-import SearchResults from "../SearchResults";
+import SearchBar from "./SearchBar";
+import SearchResults from "./SearchResults";
 
-const RepoSearch = () => {
+const App = () => {
   const [repositories, setRepositories] = useState([] as any[]);
 
   return (
@@ -23,4 +23,4 @@ const RepoSearch = () => {
   );
 };
 
-export default RepoSearch;
+export default App;
