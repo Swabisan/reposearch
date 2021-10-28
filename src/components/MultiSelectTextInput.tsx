@@ -1,6 +1,9 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import Chip from "./Chip";
+import { Search } from "react-feather";
+
+import styles from "./MultiSelectTextInput.module.css";
 
 interface Props {
   className?: string;
@@ -15,14 +18,12 @@ const MultiSelectTextInput = ({
   onSubmit,
   placeholder,
   title,
-  useState: useOtherState,
 }: Props) => {
-  const [state, setState] = useState<string[]>([]);
-  const [selections, setSelections] = useOtherState || [state, setState];
+  const [selections, setSelections] = useState<string[]>([]);
 
   useEffect(() => {
     selections && onSubmit?.(selections);
-  }, [selections]);
+  }, [onSubmit, selections]);
 
   const push = (selection: string) => {
     if (selection && !selections.includes(selection)) {
@@ -54,38 +55,57 @@ const MultiSelectTextInput = ({
         e.target[0].value = "";
       }}
     >
-      {title && selections?.length > 0 ? <i>{title}</i> : null}
-      {selections.map((name, index: number) => (
-        <Chip
-          key={index}
-          onClick={(value: any) => {
-            setSelections(
-              selections.filter((selection: string) => value !== selection)
-            );
-          }}
-        >
-          {name}
-        </Chip>
-      ))}
-      <input
-        type="text"
-        onKeyDown={(e: any) => {
-          switch (e.key) {
-            case "Backspace":
-              if (e.target.value) return;
-            /* falls through */
-            case "Delete":
-              pop();
-              return;
-          }
-        }}
-        onBlur={(e) => {
-          push(e.target.value);
+      <div className={styles.container}>
+        <div className={styles.inputRow}>
+          <input
+            className={styles.input}
+            type="text"
+            onKeyDown={(e: any) => {
+              switch (e.key) {
+                case "Backspace":
+                  if (e.target.value) return;
+                /* falls through */
+                case "Delete":
+                  pop();
+                  return;
+              }
+            }}
+            placeholder={placeholder}
+          />
+          <button className={styles.button}>
+            <Search />
+          </button>
+        </div>
 
-          e.target.value = "";
-        }}
-        placeholder={placeholder}
-      />
+        {selections?.length > 0 ? (
+          <button
+            type="reset"
+            className={styles.clear}
+            onClick={() => {
+              setSelections([]);
+            }}
+          >
+            <small>
+              <i>Clear All</i>
+            </small>
+          </button>
+        ) : null}
+      </div>
+      <div className={styles.chips}>
+        {title && selections?.length > 0 ? <i>{title}</i> : null}
+        {selections.map((name, index: number) => (
+          <Chip
+            key={index}
+            onClick={(value: any) => {
+              setSelections(
+                selections.filter((selection: string) => value !== selection)
+              );
+            }}
+          >
+            {name}
+          </Chip>
+        ))}
+      </div>
     </form>
   );
 };

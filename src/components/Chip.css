@@ -1,13 +1,18 @@
 .chip {
-  background-color: #282c34;
-  border: solid 1px white;
+  border: solid 1px black;
   border-radius: 5px;
-
-  color: white;
 
   font-size: small;
 
-  margin: 0.5%;
-  padding: 0.5%;
+  margin: 0.5em;
+  padding: 0.25em;
   width: max-content;
+}
+
+.chip:hover {
+  cursor: pointer;
+
+  background-color: red;
+  color: white;
+  border-color: red;
 }

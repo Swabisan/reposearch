@@ -1,4 +1,5 @@
 import { request } from "@octokit/request";
+import { components } from "@octokit/openapi-types";
 
 interface SearchOptions {
   q: string;
@@ -8,7 +9,9 @@ interface SearchOptions {
   page?: number | undefined;
 }
 
-export const searchRepositories = async (...input: string[]) => {
+export const searchRepositories = async (
+  ...input: string[]
+): Promise<components["schemas"]["repo-search-result-item"][]> => {
   const query = input.join(" ");
   const options: SearchOptions = { q: query };
 
@@ -19,8 +22,11 @@ export const searchRepositories = async (...input: string[]) => {
       });
 
       return response.data.items;
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      if (error.status === 403) {
+        // Warn Rate Limit
+      }
+      console.error({ ...(error as {}) });
     }
   }
 

@@ -1,10 +1,13 @@
 import React from "react";
+import { components } from "@octokit/openapi-types";
 
 interface Props {
-  results: any[];
+  results: components["schemas"]["repo-search-result-item"][];
 }
 
 const SearchResults = ({ results }: Props) => {
+  console.log(results);
+
   return (
     <div>
       <ul>

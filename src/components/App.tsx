@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
+import { components } from "@octokit/openapi-types";
 
 import { searchRepositories } from "../api/github";
 import SearchResults from "./SearchResults";
@@ -8,14 +9,16 @@ import MultiSelectTextInput from "./MultiSelectTextInput";
 
 const App = () => {
   const [loading, setLoading] = useState(false);
-  const [repositories, setRepositories] = useState([] as any[]);
+  const [repositories, setRepositories] = useState(
+    [] as components["schemas"]["repo-search-result-item"][]
+  );
 
   return (
     <div className="app">
       <header className="app-header">
         <MultiSelectTextInput
           className={styles.searchBar}
-          onSubmit={async (userInput) => {
+          onSubmit={useCallback(async (userInput) => {
             setLoading(true);
             setRepositories(
               await searchRepositories(...userInput).then((value) => {
@@ -23,7 +26,7 @@ const App = () => {
                 return value;
               })
             );
-          }}
+          }, [])}
           placeholder="Search for a GitHub repo..."
           title="Keywords:"
         />

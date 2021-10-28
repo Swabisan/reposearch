@@ -12,9 +12,9 @@
 
 .searchBar {
   display: flex;
-  flex-flow: row wrap;
-  align-items: baseline;
-  justify-content: space-around;
+  flex-flow: column wrap;
+  align-items: center;
+  justify-content: baseline;
 
   width: 100%;
 }
