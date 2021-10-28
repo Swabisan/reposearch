@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./Chip.css";
+import styles from "./Chip.module.css";
 
 interface Props {
   onClick?: (value: string) => void;
@@ -8,14 +8,14 @@ interface Props {
 
 const Chip = ({ children, onClick }: React.PropsWithChildren<Props>) => {
   return (
-    <div
-      className="chip"
+    <button
+      className={styles.chip}
       onClick={(e: any) => {
         onClick?.(e.target.innerText as string);
       }}
     >
       {children}
-    </div>
+    </button>
   );
 };
 

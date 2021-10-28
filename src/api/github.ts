@@ -10,9 +10,9 @@ interface SearchOptions {
 }
 
 export const searchRepositories = async (
-  ...input: string[]
+  ...selections: string[]
 ): Promise<components["schemas"]["repo-search-result-item"][]> => {
-  const query = input.join(" ");
+  const query = selections.join(" ");
   const options: SearchOptions = { q: query };
 
   if (query) {

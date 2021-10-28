@@ -1,34 +1,35 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useMemo, useState } from "react";
 
 import Chip from "./Chip";
-import { Search } from "react-feather";
 
-import styles from "./MultiSelectTextInput.module.css";
+import styles from "./Chips.module.css";
 
 interface Props {
   className?: string;
+  children: React.ReactElement;
   onSubmit?: (selections: string[]) => void;
-  placeholder?: string;
   title?: string;
   useState?: [string[], Dispatch<SetStateAction<string[]>>];
 }
 
-const MultiSelectTextInput = ({
+const Chips = ({
   className,
+  children,
   onSubmit,
-  placeholder,
   title,
+  useState: useOtherState,
 }: Props) => {
-  const [selections, setSelections] = useState<string[]>([]);
-
-  useEffect(() => {
-    selections && onSubmit?.(selections);
-  }, [onSubmit, selections]);
+  const [state, setState] = useState<string[]>([]);
+  const [selections, setSelections] = useMemo(
+    () => useOtherState || [state, setState],
+    [useOtherState, [state, setState]]
+  );
 
   const push = (selection: string) => {
     if (selection && !selections.includes(selection)) {
       const pushed = [...selections, selection].sort();
       setSelections(pushed);
+      onSubmit?.(pushed);
 
       return pushed;
     }
@@ -39,6 +40,7 @@ const MultiSelectTextInput = ({
     const popped = [...remaining].reverse();
 
     setSelections([...remaining].reverse());
+    onSubmit?.(popped);
     return popped;
   };
 
@@ -49,34 +51,10 @@ const MultiSelectTextInput = ({
         e: React.FormEvent<HTMLFormElement> & { target: { value: string }[] }
       ) => {
         e.preventDefault();
-
-        const value = e.target[0].value;
-        push(value);
-        e.target[0].value = "";
       }}
     >
-      <div className={styles.container}>
-        <div className={styles.inputRow}>
-          <input
-            className={styles.input}
-            type="text"
-            onKeyDown={(e: any) => {
-              switch (e.key) {
-                case "Backspace":
-                  if (e.target.value) return;
-                /* falls through */
-                case "Delete":
-                  pop();
-                  return;
-              }
-            }}
-            placeholder={placeholder}
-          />
-          <button className={styles.button}>
-            <Search />
-          </button>
-        </div>
-
+      <div className={styles.inputArea}>
+        {React.cloneElement(children, { push, pop })}
         {selections?.length > 0 ? (
           <button
             type="reset"
@@ -95,7 +73,7 @@ const MultiSelectTextInput = ({
         {title && selections?.length > 0 ? <i>{title}</i> : null}
         {selections.map((name, index: number) => (
           <Chip
-            key={index}
+            key={selections[index]}
             onClick={(value: any) => {
               setSelections(
                 selections.filter((selection: string) => value !== selection)
@@ -110,4 +88,4 @@ const MultiSelectTextInput = ({
   );
 };
 
-export default MultiSelectTextInput;
+export default Chips;

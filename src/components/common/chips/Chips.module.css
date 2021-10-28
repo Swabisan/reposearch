@@ -1,0 +1,21 @@
+.clear {
+  border: none;
+}
+
+.clear:hover {
+  color: red;
+}
+
+.inputArea {
+  margin: 0.5em;
+  padding: 0.5em;
+}
+
+.chips {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: baseline;
+  justify-content: space-around;
+
+  margin: 0.5em;
+}

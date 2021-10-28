@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+}
+
+.input {
+  border-radius: 0.5em 0 0 0.5em;
+  border-right: none;
+
+  padding: 0 1em;
+
+  min-width: min-content;
+  width: 50vw;
+}
+
+.button {
+  border-radius: 0 0.5em 0.5em 0;
+}
