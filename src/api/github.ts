@@ -1,19 +1,34 @@
 import { request } from "@octokit/request";
 import { components } from "@octokit/openapi-types";
 
+export type SortBy =
+  | "stars"
+  | "forks"
+  | "help-wanted-issues"
+  | "updated"
+  | undefined;
+export type SortOrder = "desc" | "asc";
+
+export interface SortOptions {
+  sort?: SortBy;
+  order?: SortOrder;
+}
+
 interface SearchOptions {
   q: string;
-  sort?: "stars" | "forks" | "help-wanted-issues" | "updated" | undefined;
-  order?: "desc" | "asc" | undefined;
-  per_page?: number | undefined;
-  page?: number | undefined;
+  per_page?: number;
+  page?: number;
+}
+
+export interface SearchQualifiers {
+  [qualifier: string]: string[];
 }
 
 export const searchRepositories = async (
-  ...selections: string[]
+  selections: string[]
 ): Promise<components["schemas"]["repo-search-result-item"][]> => {
   const query = selections.join(" ");
-  const options: SearchOptions = { q: query };
+  const options: SearchOptions & SortOptions = { q: query };
 
   if (query) {
     try {
