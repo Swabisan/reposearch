@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { components } from "@octokit/openapi-types";
 
 import { searchRepositories } from "../api/github";

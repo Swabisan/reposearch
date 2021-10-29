@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useMemo, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 
 import Chip from "./Chip";
 
@@ -20,10 +20,7 @@ const Chips = ({
   useState: useOtherState,
 }: Props) => {
   const [state, setState] = useState<string[]>([]);
-  const [selections, setSelections] = useMemo(
-    () => useOtherState || [state, setState],
-    [useOtherState, [state, setState]]
-  );
+  const [selections, setSelections] = useOtherState || [state, setState];
 
   const push = (selection: string) => {
     if (selection && !selections.includes(selection)) {
